@@ -1,0 +1,143 @@
+/*
+ * Copyright (c) 2026 Texas Instruments Incorporated
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * PHYs certified on CC2340R5. Each node names an LRF_Config provided by
+ * hal_ti (source/ti/radio_phys/cc23x0r5/) and describes one operating mode.
+ * Labels are shared with the catalogs of other SoCs that certify the same
+ * PHY, so an overlay ports by changing only the include.
+ *
+ * Include this file from an overlay and point phy-mode of a
+ * basic-radio-base PHY child at one of the PHY labels below. Only the
+ * referenced PHYs are linked into the image.
+ */
+
+/ {
+	radio-phys {
+		/* 2.4 GHz - Bluetooth 5, LE - 1 Mbps (generic PBE) */
+		ti_phy_2_4_ghz_bluetooth_5_le_1_mbps: ble5-1-mbps {
+			compatible = "ti,cc23x0-radio-phy-config";
+			ti,lrf-config = "LRF_config_ble5_1m_2m_coded_generic";
+			ti,len-pos = <8>;
+			ti,num-len-bits = <8>;
+			ti,phy-feature = <0x0000>;
+			datarate-bps = <1000000>;
+			modulation = "2-gfsk";
+			deviation-hz = <250000>;
+			frequency-min-hz = <2400000000>;
+			frequency-max-hz = <2483500000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <2450000000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <0>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 2.4 GHz - Bluetooth 5, LE - 2 Mbps (generic PBE) */
+		ti_phy_2_4_ghz_bluetooth_5_le_2_mbps: ble5-2-mbps {
+			compatible = "ti,cc23x0-radio-phy-config";
+			ti,lrf-config = "LRF_config_ble5_1m_2m_coded_generic";
+			ti,len-pos = <8>;
+			ti,num-len-bits = <8>;
+			ti,phy-feature = <0x0001>;
+			datarate-bps = <2000000>;
+			modulation = "2-gfsk";
+			deviation-hz = <500000>;
+			frequency-min-hz = <2400000000>;
+			frequency-max-hz = <2483500000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <2450000000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <0>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 2.4 GHz - Bluetooth 5, LE - Coded (generic PBE) */
+		ti_phy_2_4_ghz_bluetooth_5_le_coded: ble5-coded {
+			compatible = "ti,cc23x0-radio-phy-config";
+			ti,lrf-config = "LRF_config_ble5_1m_2m_coded_generic";
+			ti,len-pos = <8>;
+			ti,num-len-bits = <8>;
+			ti,phy-feature = <0x0002>;
+			datarate-bps = <125000>;
+			modulation = "2-gfsk";
+			deviation-hz = <250000>;
+			frequency-min-hz = <2400000000>;
+			frequency-max-hz = <2483500000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <2450000000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <0>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 2.4 GHz - IEEE 802.15.4 - 250 kbps, O-QPSK (generic PBE) */
+		ti_phy_2_4_ghz_ieee_802_15_4_250_kbps_o_qpsk: ieee-802-15-4-250-kbps-o-qpsk {
+			compatible = "ti,cc23x0-radio-phy-config";
+			ti,lrf-config = "LRF_config_ieee_802_15_4_generic";
+			ti,len-pos = <0>;
+			ti,num-len-bits = <7>;
+			ti,phy-feature = <0x0000>;
+			datarate-bps = <250000>;
+			modulation = "oqpsk";
+			deviation-hz = <0>;
+			frequency-min-hz = <2405000000>;
+			frequency-max-hz = <2480000000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <2442500000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <0>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 2.4 GHz - Proprietary - 250 kbps MSK, 1/2-rate FEC (generic PBE) */
+		ti_phy_2_4_ghz_prop_250_kbps_msk_fec: prop-250-kbps-msk-fec {
+			compatible = "ti,cc23x0-radio-phy-config";
+			ti,lrf-config = "LRF_config_prop_250kbps_msk_fec";
+			ti,len-pos = <0>;
+			ti,num-len-bits = <4>;
+			ti,phy-feature = <0x0000>;
+			datarate-bps = <250000>;
+			modulation = "msk";
+			deviation-hz = <0>;
+			frequency-min-hz = <2400000000>;
+			frequency-max-hz = <2483500000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <2440000000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <0>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 2.4 GHz - Proprietary - 2 Mbps GFSK, 320 kHz deviation (generic PBE) */
+		ti_phy_2_4_ghz_prop_2_mbps_320_khz_gfsk: prop-2-mbps-320-khz-gfsk {
+			compatible = "ti,cc23x0-radio-phy-config";
+			ti,lrf-config = "LRF_config_prop_2mbps_320khz_gfsk";
+			ti,len-pos = <0>;
+			ti,num-len-bits = <4>;
+			ti,phy-feature = <0x0000>;
+			datarate-bps = <2000000>;
+			modulation = "2-gfsk";
+			deviation-hz = <320000>;
+			frequency-min-hz = <2400000000>;
+			frequency-max-hz = <2483500000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <2440000000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <0>;
+			boot-max-packet-length = <255>;
+		};
+	};
+};

@@ -1,0 +1,5 @@
+sample:
+  name: Basic Radio RX
+  description: Receive packets asynchronously via the vendor-neutral basic_radio API.
+  integration_platforms:
+    - lp_em_cc2340r5

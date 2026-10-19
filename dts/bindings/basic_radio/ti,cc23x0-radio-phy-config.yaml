@@ -1,0 +1,164 @@
+# Copyright (c) 2026 Texas Instruments Incorporated
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  TI CC23x0 PHY: names the LRF_Config that holds the radio settings and
+  describes one operating mode. The register data itself is C, exported
+  from SmartRF Studio; this node only carries metadata the driver needs.
+
+  Certified PHYs are listed per SoC, for example in
+  <ti/cc2340r5-radio-phys.dtsi>. Their LRF_Config
+  objects live in hal_ti (source/ti/radio_phys/) and are named
+  LRF_config_<phy>.
+
+  Custom PHY:
+    1. Export the PHY from SmartRF Studio as C and add the .c file to the
+       application (target_sources(app PRIVATE ...)).
+    2. Add a node with this compatible to the application overlay, set
+       ti,lrf-config to the name of the exported LRF_Config (LRF_config by
+       default).
+    3. Point phy-mode of a basic-radio-base PHY child at this PHY node.
+
+  Example:
+
+    radio-phys {
+        my_phy: my-phy {
+            compatible = "ti,cc23x0-radio-phy-config";
+            ti,lrf-config = "LRF_config";
+            ti,len-pos = <8>;
+            ti,num-len-bits = <8>;
+            ti,phy-feature = <0x0000>;
+            datarate-bps = <1000000>;
+            modulation = "2-gfsk";
+            deviation-hz = <250000>;
+            frequency-min-hz = <2400000000>;
+            frequency-max-hz = <2483500000>;
+            crc-enable;
+            variable-length;
+        };
+    };
+
+  The mode properties must match the C export. The build does not check
+  them against the register data.
+
+compatible: "ti,cc23x0-radio-phy-config"
+
+properties:
+  ti,lrf-config:
+    type: string
+    required: true
+    description: |
+      C identifier of the const LRF_Config for this PHY. The driver declares
+      it extern and links against it.
+
+  ti,len-pos:
+    type: int
+    required: true
+    description: |
+      PBE_GENERIC_RAM.LENCFG.LENPOS of the export: bit position of the
+      length field in the frame header. Required by the generic PBE driver.
+
+  ti,num-len-bits:
+    type: int
+    required: true
+    description: |
+      PBE_GENERIC_RAM.LENCFG.NUMLENBITS of the export: size of the length
+      field in bits. Required by the generic PBE driver.
+
+  ti,phy-feature:
+    type: int
+    required: true
+    description: |
+      phyFeatures word written to the radio commands. Selects which
+      feature-gated register segments are applied. 0 for PHYs without
+      sub-PHYs.
+
+  datarate-bps:
+    type: int
+    required: true
+    description: |
+      Data rate in bits per second (e.g., 1000000 for 1 Mbps).
+
+  modulation:
+    type: string
+    required: true
+    enum:
+      - "2-gfsk"
+      - "4-gfsk"
+      - "2-fsk"
+      - "ook"
+      - "msk"
+      - "oqpsk"
+      - "ofdm"
+    description: |
+      Modulation scheme.
+
+  deviation-hz:
+    type: int
+    required: true
+    description: |
+      Frequency deviation in Hz for FSK/GFSK (0 for OQPSK/OFDM).
+
+  frequency-min-hz:
+    type: int
+    required: true
+    description: |
+      Lowest characterized carrier frequency in Hz.
+
+  frequency-max-hz:
+    type: int
+    required: true
+    description: |
+      Highest characterized carrier frequency in Hz.
+
+  crc-enable:
+    type: boolean
+    required: true
+    description: |
+      Hardware CRC enabled for this mode.
+
+  variable-length:
+    type: boolean
+    required: true
+    description: |
+      Frames carry a length byte (true) or fixed length (false).
+
+  preamble-length:
+    type: int
+    description: |
+      Preamble length in bytes (0 = default for the PHY).
+
+  sync-word-length:
+    type: int
+    description: |
+      Sync word length in bytes (0 = default for the PHY).
+
+  whitening-enable:
+    type: boolean
+    description: |
+      Data whitening enabled (default: false).
+
+  boot-frequency-hz:
+    type: int
+    description: |
+      Boot-time default center frequency in Hz. Must be within the PHY's
+      characterized range (frequency-min-hz .. frequency-max-hz).
+      Overridden by basic_radio_config().
+
+  boot-sync-word:
+    type: int
+    description: |
+      Boot-time default sync word, LSB-aligned.
+      Overridden by basic_radio_config().
+
+  boot-tx-power-dbm:
+    type: int
+    description: |
+      Boot-time default TX power in dBm. Must be within the PHY's power table range.
+      Overridden by basic_radio_config().
+
+  boot-max-packet-length:
+    type: int
+    description: |
+      Boot-time default maximum payload length in bytes.
+      Overridden by basic_radio_config().

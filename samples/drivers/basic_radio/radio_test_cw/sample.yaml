@@ -1,0 +1,5 @@
+sample:
+  name: Basic Radio Tone
+  description: Transmit continuous wave (tone) asynchronously via the vendor-neutral basic_radio API.
+  integration_platforms:
+    - lp_em_cc2340r5

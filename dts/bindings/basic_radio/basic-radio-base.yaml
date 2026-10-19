@@ -1,0 +1,33 @@
+# Copyright (c) 2026 Texas Instruments Incorporated
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  Basic Radio base node. Represents a radio device that can operate with
+  multiple PHY configurations. Each PHY child selects a waveform mode
+  (via phy-mode). Runtime parameters are set via basic_radio_config().
+
+  The compatible is vendor-specific (e.g., "ti,cc23x0-basic-radio"),
+  but all such nodes follow this base schema.
+
+compatible: "basic-radio-base"
+
+include: [base.yaml]
+
+properties:
+  "#address-cells":
+    const: 1
+  "#size-cells":
+    const: 0
+
+child-binding:
+  description: |
+    One PHY configuration (waveform mode). Selects a PHY from a
+    vendor-specific radio-phy-config node via phy-mode.
+  properties:
+    phy-mode:
+      type: phandle
+      required: true
+      description: |
+        Reference to a PHY node in a radio-phy-config node.
+        The PHY node defines the waveform (datarate, modulation, etc.)
+        and the characterized frequency range.
