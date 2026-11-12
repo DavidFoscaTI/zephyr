@@ -1,0 +1,199 @@
+# Copyright (c) 2026 Texas Instruments Incorporated
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  TI CC14x0 PHY: names the main register configuration that holds the
+  radio settings and describes one operating mode. The register data
+  itself is C, exported from SmartRF Studio 8; this node only carries
+  metadata the driver needs.
+
+  Several nodes may name the same configuration and differ only in
+  ti,phy-feature (sub-PHYs of one export, for example Wi-SUN FSK operating
+  modes and OFDM options). The driver stores each distinct configuration
+  once on the transceiver.
+
+  Certified PHYs are listed per transceiver, for example in
+  <ti/cc1407p-radio-phys.dtsi>.
+
+  Custom PHY:
+    1. Export the PHY from SmartRF Studio 8 as C, rename LRF_mainRegConfig
+       and LRF_mainRegConfig_byteCount to unique names, and add the .c file
+       to the application (target_sources(app PRIVATE ...)).
+    2. Add a node with this compatible to the application overlay, set
+       ti,main-config to the renamed configuration.
+    3. Point phy-mode of a ti,cc14x0-basic-radio PHY child at this PHY node.
+
+  Example:
+
+    radio-phys {
+        my_phy: my-phy {
+            compatible = "ti,cc14x0-radio-phy-config";
+            ti,main-config = "LRF_mainRegConfig_my_phy";
+            ti,rf-mode = "prop-fsk";
+            ti,modem = "fsk";
+            ti,payload-header = "gen-fsk";
+            ti,phy-feature = <0x0000>;
+            datarate-bps = <50000>;
+            modulation = "2-gfsk";
+            deviation-hz = <25000>;
+            frequency-min-hz = <779000000>;
+            frequency-max-hz = <930000000>;
+            crc-enable;
+            variable-length;
+        };
+    };
+
+  The mode properties must match the C export. The build does not check
+  them against the register data.
+
+compatible: "ti,cc14x0-radio-phy-config"
+
+properties:
+  ti,main-config:
+    type: string
+    required: true
+    description: |
+      C identifier of the const uint32_t[] main register configuration
+      (LRF_mainRegConfig of the export, renamed). The driver also links
+      <name>_byteCount.
+
+  ti,rf-mode:
+    type: string
+    required: true
+    enum:
+      - "sun"
+      - "prop-fsk"
+      - "prop-fsk-peak-agc"
+      - "ook"
+      - "xlr"
+    description: |
+      RF firmware the transceiver runs for this PHY (TRX_RF_MODE of the
+      export). Switching to a PHY with another mode reloads the firmware.
+
+  ti,modem:
+    type: string
+    required: true
+    enum:
+      - "fsk"
+      - "ofdm"
+      - "oqpsk"
+    description: |
+      Modem used by the radio commands (TRX_RadioCommand_Modem).
+
+  ti,payload-header:
+    type: string
+    required: true
+    enum:
+      - "gen-fsk"
+      - "sun-fsk"
+      - "sun-ofdm"
+      - "sun-oqpsk"
+    description: |
+      Format of the payload header exchanged with the transceiver on TX and
+      RX streams (TRX_PayloadHeader_GenFSK, _SunFSK, _SunOFDM, _SUNOQPSK).
+
+  ti,phy-feature:
+    type: int
+    required: true
+    description: |
+      option_mask written to the radio commands (TRX_PHY_FEATURE_* of the
+      export). Selects the sub-PHY within the configuration. 0 for PHYs
+      without sub-PHYs.
+
+  ti,tx-rate:
+    type: int
+    default: 0
+    description: |
+      TX rate field of the payload header: MCS for sun-ofdm, rate mode for
+      sun-oqpsk. Ignored for other headers.
+
+  datarate-bps:
+    type: int
+    required: true
+    description: |
+      Data rate in bits per second (e.g., 50000 for 50 kbps).
+
+  modulation:
+    type: string
+    required: true
+    enum:
+      - "2-gfsk"
+      - "4-gfsk"
+      - "2-fsk"
+      - "ook"
+      - "msk"
+      - "oqpsk"
+      - "ofdm"
+    description: |
+      Modulation scheme.
+
+  deviation-hz:
+    type: int
+    required: true
+    description: |
+      Frequency deviation in Hz for FSK/GFSK (0 for OQPSK/OFDM).
+
+  frequency-min-hz:
+    type: int
+    required: true
+    description: |
+      Lowest characterized carrier frequency in Hz.
+
+  frequency-max-hz:
+    type: int
+    required: true
+    description: |
+      Highest characterized carrier frequency in Hz.
+
+  crc-enable:
+    type: boolean
+    required: true
+    description: |
+      Hardware CRC enabled for this mode.
+
+  variable-length:
+    type: boolean
+    required: true
+    description: |
+      Frames carry a length byte (true) or fixed length (false).
+
+  preamble-length:
+    type: int
+    description: |
+      Preamble length in bytes (0 = default for the PHY).
+
+  sync-word-length:
+    type: int
+    description: |
+      Sync word length in bytes (0 = default for the PHY).
+
+  whitening-enable:
+    type: boolean
+    description: |
+      Data whitening enabled (default: false).
+
+  boot-frequency-hz:
+    type: int
+    description: |
+      Boot-time default center frequency in Hz. Must be within the PHY's
+      characterized range (frequency-min-hz .. frequency-max-hz).
+      Overridden by basic_radio_config().
+
+  boot-sync-word:
+    type: int
+    description: |
+      Sync word programmed in the configuration, LSB-aligned. The
+      transceiver cannot change it at runtime; basic_radio_config() with
+      another sync word returns -ENOTSUP.
+
+  boot-tx-power-dbm:
+    type: int
+    description: |
+      Boot-time default TX power in dBm. Must be within the board's power
+      table range. Overridden by basic_radio_config().
+
+  boot-max-packet-length:
+    type: int
+    description: |
+      Boot-time default maximum payload length in bytes.
+      Overridden by basic_radio_config().

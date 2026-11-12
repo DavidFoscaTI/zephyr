@@ -1,0 +1,24 @@
+# Copyright (c) 2026 Texas Instruments Incorporated
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  TI CC23x0 on-chip radio, driven through the Basic Radio API.
+
+  Each child selects a PHY from ti,cc23x0-radio-phy-config nodes, for
+  example from <ti/cc2340r5-radio-phys.dtsi>.
+
+  Example:
+
+    basic_radio0: basic_radio {
+        compatible = "ti,cc23x0-basic-radio";
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        phy0: phy_default {
+            phy-mode = <&ti_phy_2_4_ghz_bluetooth_5_le_1_mbps>;
+        };
+    };
+
+compatible: "ti,cc23x0-basic-radio"
+
+include: [basic-radio-base.yaml]

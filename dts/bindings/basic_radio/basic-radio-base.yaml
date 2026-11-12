@@ -2,14 +2,13 @@
 # SPDX-License-Identifier: Apache-2.0
 
 description: |
-  Basic Radio base node. Represents a radio device that can operate with
-  multiple PHY configurations. Each PHY child selects a waveform mode
-  (via phy-mode). Runtime parameters are set via basic_radio_config().
+  Common properties of a Basic Radio device. Include-only: each radio
+  binding (for example ti,cc23x0-basic-radio.yaml) includes this file and
+  adds its device-specific properties.
 
-  The compatible is vendor-specific (e.g., "ti,cc23x0-basic-radio"),
-  but all such nodes follow this base schema.
-
-compatible: "basic-radio-base"
+  A Basic Radio device can operate with multiple PHY configurations. Each
+  PHY child selects a waveform mode (via phy-mode). Runtime parameters are
+  set via basic_radio_config().
 
 include: [base.yaml]
 

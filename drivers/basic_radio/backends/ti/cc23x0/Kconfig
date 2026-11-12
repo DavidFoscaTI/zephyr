@@ -5,6 +5,7 @@ config BASIC_RADIO_CC23X0
 	bool "TI CC23x0 RCL backend"
 	default y
 	depends on SOC_SERIES_CC23X0
+	depends on DT_HAS_TI_CC23X0_BASIC_RADIO_ENABLED
 	select SIMPLELINK_F3_RADIO_DRIVER
 	select SIMPLELINK_F3_RADIO_PHYS
 	select PM

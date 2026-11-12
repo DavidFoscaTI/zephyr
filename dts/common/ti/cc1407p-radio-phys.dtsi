@@ -1,0 +1,129 @@
+/*
+ * Copyright (c) 2026 Texas Instruments Incorporated
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * PHYs for the CC1407P sub-1 GHz transceiver. Each node names a main
+ * register configuration exported from SmartRF Studio 8 (PHY settings
+ * 1.03.00, BP-EM-CC1407P-SE) and describes one operating mode. Nodes that
+ * name the same configuration are sub-PHYs selected by ti,phy-feature.
+ *
+ * Include this file from an overlay and point phy-mode of a
+ * ti,cc14x0-basic-radio PHY child at one of the PHY labels below. Only the
+ * referenced PHYs are linked into the image.
+ */
+
+/ {
+	radio-phys {
+		/* 779 - 930 MHz - Proprietary - 50 kbps, 25 kHz dev, 2-GFSK - Low power */
+		ti_phy_sub_1_ghz_prop_50_kbps_2_gfsk_lp: prop-50-kbps-2-gfsk-lp {
+			compatible = "ti,cc14x0-radio-phy-config";
+			ti,main-config = "LRF_mainRegConfig_prop_50kbps_lp";
+			ti,rf-mode = "prop-fsk";
+			ti,modem = "fsk";
+			ti,payload-header = "gen-fsk";
+			ti,phy-feature = <0x0000>;
+			datarate-bps = <50000>;
+			modulation = "2-gfsk";
+			deviation-hz = <25000>;
+			frequency-min-hz = <779000000>;
+			frequency-max-hz = <930000000>;
+			crc-enable;
+			variable-length;
+			preamble-length = <4>;
+			sync-word-length = <4>;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <915000000>;
+			boot-sync-word = <0x930B51DE>;
+			boot-tx-power-dbm = <14>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 779 - 930 MHz - SUN O-QPSK - 100 kcps, rate mode 1 (12.5 kbps) */
+		ti_phy_sub_1_ghz_sun_oqpsk_100_kcps: sun-oqpsk-100-kcps {
+			compatible = "ti,cc14x0-radio-phy-config";
+			ti,main-config = "LRF_mainRegConfig_sun_oqpsk_gfsk";
+			ti,rf-mode = "prop-fsk-peak-agc";
+			ti,modem = "oqpsk";
+			ti,payload-header = "sun-oqpsk";
+			ti,phy-feature = <0x0000>;
+			ti,tx-rate = <1>;
+			datarate-bps = <12500>;
+			modulation = "oqpsk";
+			deviation-hz = <0>;
+			frequency-min-hz = <779000000>;
+			frequency-max-hz = <930000000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <915000000>;
+			boot-tx-power-dbm = <14>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 779 - 930 MHz - Wi-SUN, Europe - SUN FSK mode 1a, 50 kbps, MI = 0.5 */
+		ti_phy_sub_1_ghz_wisun_eu_fsk_1a: wisun-eu-fsk-1a {
+			compatible = "ti,cc14x0-radio-phy-config";
+			ti,main-config = "LRF_mainRegConfig_wisun_eu";
+			ti,rf-mode = "sun";
+			ti,modem = "fsk";
+			ti,payload-header = "sun-fsk";
+			ti,phy-feature = <0x0000>;	/* FSK_MODE_1A | FEC_MODE_IN_TX_OFF */
+			datarate-bps = <50000>;
+			modulation = "2-fsk";
+			deviation-hz = <12500>;		/* MI * symbol rate / 2 */
+			frequency-min-hz = <779000000>;
+			frequency-max-hz = <930000000>;
+			crc-enable;
+			variable-length;
+			whitening-enable;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <863100000>;
+			boot-tx-power-dbm = <14>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 779 - 930 MHz - Wi-SUN, Europe - SUN OFDM option 4, MCS6 (300 kbps) */
+		ti_phy_sub_1_ghz_wisun_eu_ofdm_opt4: wisun-eu-ofdm-opt4 {
+			compatible = "ti,cc14x0-radio-phy-config";
+			ti,main-config = "LRF_mainRegConfig_wisun_eu";
+			ti,rf-mode = "sun";
+			ti,modem = "ofdm";
+			ti,payload-header = "sun-ofdm";
+			ti,phy-feature = <0x0002>;	/* OFDM_OPTION_4MCS26 */
+			ti,tx-rate = <6>;
+			datarate-bps = <300000>;
+			modulation = "ofdm";
+			deviation-hz = <0>;
+			frequency-min-hz = <779000000>;
+			frequency-max-hz = <930000000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <863100000>;
+			boot-tx-power-dbm = <14>;
+			boot-max-packet-length = <255>;
+		};
+
+		/* 779 - 930 MHz - Wi-SUN, North America - SUN OFDM option 2, MCS6 (1200 kbps) */
+		ti_phy_sub_1_ghz_wisun_na_ofdm_opt2: wisun-na-ofdm-opt2 {
+			compatible = "ti,cc14x0-radio-phy-config";
+			ti,main-config = "LRF_mainRegConfig_wisun_na";
+			ti,rf-mode = "sun";
+			ti,modem = "ofdm";
+			ti,payload-header = "sun-ofdm";
+			ti,phy-feature = <0x0008>;	/* OFDM_OPTION_2 */
+			ti,tx-rate = <6>;
+			datarate-bps = <1200000>;
+			modulation = "ofdm";
+			deviation-hz = <0>;
+			frequency-min-hz = <779000000>;
+			frequency-max-hz = <930000000>;
+			crc-enable;
+			variable-length;
+			/* Boot defaults (overridden by basic_radio_config()) */
+			boot-frequency-hz = <902200000>;
+			boot-tx-power-dbm = <14>;
+			boot-max-packet-length = <255>;
+		};
+	};
+};

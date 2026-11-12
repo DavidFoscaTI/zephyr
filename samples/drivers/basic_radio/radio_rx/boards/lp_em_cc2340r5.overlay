@@ -50,7 +50,7 @@
 
 / {
 	basic_radio0: basic_radio {
-		compatible = "basic-radio-base";
+		compatible = "ti,cc23x0-basic-radio";
 		status = "okay";
 
 		phy0: phy_default {

@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2026 Texas Instruments Incorporated
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * basic_radio sample overlay for LP-CC2745R10-Q1. The CC2745 has no
+ * sub-1 GHz radio; the radio is the CC1407P on the BP-CC140XP BoosterPack,
+ * so this sample requires the shield:
+ *
+ *   west build -b lp_em_cc2745r10_q1/cc2745r10_q1 --shield ti_bp_cc140xp \
+ *       samples/drivers/basic_radio/<sample>
+ *
+ * The shield provides the radio node (basic_radio0): SPI link and control
+ * GPIOs. This file only selects the PHY.
+ *
+ * The PHY comes from cc1407p-radio-phys.dtsi, the list of PHYs certified
+ * on CC1407P. To use another one, point phy-mode at another PHY label.
+ * For a custom PHY see ti,cc14x0-radio-phy-config.yaml.
+ */
+
+#include <ti/cc1407p-radio-phys.dtsi>
+
+&basic_radio0 {
+	phy0: phy_default {
+		phy-mode = <&ti_phy_sub_1_ghz_prop_50_kbps_2_gfsk_lp>;
+	};
+};

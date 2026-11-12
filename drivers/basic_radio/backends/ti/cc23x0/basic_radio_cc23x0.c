@@ -15,7 +15,7 @@
  * certified PHYs come from hal_ti, custom PHYs from the application.
  */
 
-#define DT_DRV_COMPAT basic_radio_base
+#define DT_DRV_COMPAT ti_cc23x0_basic_radio
 
 #include <errno.h>
 #include <limits.h>

@@ -1,0 +1,56 @@
+# Copyright (c) 2026 Texas Instruments Incorporated
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  TI CC14x0 sub-1 GHz transceiver connected over SPI, driven through the
+  Basic Radio API.
+
+  The node describes the SPI link and the control GPIOs. It is provided by
+  a shield, for example ti_bp_cc140xp. Each child selects a PHY from
+  ti,cc14x0-radio-phy-config nodes, for example from
+  <ti/cc1407p-radio-phys.dtsi>.
+
+  The application selects the PHY:
+
+    &basic_radio0 {
+        phy0: phy_default {
+            phy-mode = <&ti_phy_sub_1_ghz_prop_50_kbps_2_gfsk_lp>;
+        };
+    };
+
+compatible: "ti,cc14x0-basic-radio"
+
+include: [spi-device.yaml, basic-radio-base.yaml]
+
+properties:
+  reset-gpios:
+    type: phandle-array
+    required: true
+    description: |
+      RESET_N line of the transceiver.
+
+  trx-host-spi-int-gpios:
+    type: phandle-array
+    required: true
+    description: |
+      SPI_INT line. The transceiver asserts it to request a transaction
+      from the host.
+
+  poci-gpios:
+    type: phandle-array
+    required: true
+    description: |
+      POCI (MISO) line sampled as a GPIO. The transceiver uses it to signal
+      ready during the SPI handshake.
+
+  ti,dio2-function:
+    type: int
+    default: 0x54
+    description: |
+      TRX_Dio2Config value for DIO2 (PA control). Default 0x54.
+
+  ti,dio3-function:
+    type: int
+    default: 0x12
+    description: |
+      TRX_Dio3Config value for DIO3 (LNA control). Default 0x12.
